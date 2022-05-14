@@ -1,0 +1,23 @@
+{
+  "name": "wij_mainframe_bot",
+  "version": "1.0.0",
+  "description": "The frontend extension to WIJ's mainframe",
+  "main": "main.js",
+  "author": "Tom Schollenberger",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc & node ./dist/main.js"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^0.4.1",
+    "bufferutil": "^4.0.6",
+    "discord-api-types": "^0.32.1",
+    "discord.js": "^13.7.0",
+    "dotenv": "^16.0.1",
+    "erlpack": "discord/erlpack",
+    "got": "^12.0.4",
+    "utf-8-validate": "^5.0.9",
+    "zlib-sync": "^0.1.7"
+  }
+}
