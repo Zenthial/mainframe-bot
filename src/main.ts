@@ -1,7 +1,8 @@
 import { Client, Collection, Intents } from "discord.js"
 import dotenv from "dotenv"
-import { load_slash_commands } from "./slash_command_loader"
-import { CommandInterface } from "./types/command_interface"
+import { load_slash_commands } from "./slash_command_loader.js"
+import { CommandInterface } from "./types/command_interface.js"
+import { handleVerificationRequest } from "./verification_requests.js"
 
 dotenv.config()
 
@@ -26,6 +27,16 @@ async function main() {
         } catch (error) {
             console.error(error);
             await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+        }
+    })
+
+    client.on("interactionCreate", async interaction => {
+        if (!interaction.isButton()) return;
+
+        if (interaction.customId === "verifyYes") {
+            await handleVerificationRequest(interaction)
+        } else if (interaction.customId === "verifyNo") {
+            interaction.reply({ content: "okay, feel free to verify whenever!", ephemeral: true })
         }
     })
 

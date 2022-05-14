@@ -3,7 +3,7 @@ import { Routes } from "discord-api-types/v9"
 import { Collection } from "discord.js"
 import fs from "node:fs"
 import path from "node:path"
-import { CommandInterface } from "./types/command_interface"
+import { CommandInterface } from "./types/command_interface.js"
 
 export async function load_slash_commands(): Promise<Collection<string, CommandInterface>> {
     const commands = new Array();
@@ -13,7 +13,8 @@ export async function load_slash_commands(): Promise<Collection<string, CommandI
 
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
-        const command: CommandInterface = require(filePath).Command;
+        const command = require(filePath).Command;
+        console.log(command)
         commands.push(command.data.toJSON());
         commandsCollection.set(command.data.name, command)
     }
