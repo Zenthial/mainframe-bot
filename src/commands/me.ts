@@ -6,6 +6,7 @@ import { checkVerified } from "../verification_requests";
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
     let percent = Math.round(((Number(cP - currentRankCPRequirement)) / Number(promotionCPRequirement - currentRankCPRequirement)) * 100)
     let multiNumb = Math.floor(percent / 10)
+
     let retStr = ":ballot_box_with_check: ".repeat(multiNumb) + ":black_square_button: ".repeat(10 - multiNumb)
     retStr += "**" + percent + "%**";
 
@@ -33,7 +34,7 @@ export class Command {
                     .setThumbnail(await getHeadshot(userId))
 
                 if (userInfo.floor_points != null && userInfo.goal_points != null) {
-                    embed.addField(`Progress to your next promotion (${userInfo.goal_points} cP Required)`, createBar(userInfo.points, userInfo.floor_points!, userInfo.goal_points!))
+                    embed.addField(`Progress to your next promotion (${userInfo.goal_points} cP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
                 }
 
                 if (userInfo.divisions != null) {

@@ -25,7 +25,7 @@ export async function handleVerificationRequest(interaction: ButtonInteraction) 
         let { data } = await axios.get(`http://127.0.0.1:8080/verify/code/${discord_id}`);
 
         if (data && data.code) {
-            await interaction.reply({ content: `your code is ${data.code}`, ephemeral: true })
+            await interaction.reply({ content: `your code is ${data.code}\nyou have 5 minutes to verify here: https://www.roblox.com/games/9643349323/WIJ-Verification`, ephemeral: true })
         } else {
             await interaction.reply({ content: "failed to get a code", ephemeral: true })
         }

@@ -41,23 +41,26 @@ export class Command {
                         }
                     }
 
-                    if (userInfo.divisions.st && stRole && !member.roles.cache.find(role => role.name == stRole?.name)) {
-                        try {
-                            await member.roles.add(stRole);
-                            return_str += `added role ${stRole.name}\n`
-                        } catch (e) {
-                            return_str += `failed to add role ${stRole.name}\n`
+                    if (userInfo.divisions != null) {
+                        if (userInfo.divisions.st != null && stRole && !member.roles.cache.find(role => role.name == stRole?.name)) {
+                            try {
+                                await member.roles.add(stRole);
+                                return_str += `added role ${stRole.name}\n`
+                            } catch (e) {
+                                return_str += `failed to add role ${stRole.name}\n`
+                            }
+                        }
+
+                        if (userInfo.divisions.sable != null && sableRole && !member.roles.cache.find(role => role.name == sableRole?.name)) {
+                            try {
+                                await member.roles.add(sableRole)
+                                return_str += `added role ${sableRole.name}\n`
+                            } catch (e) {
+                                return_str += `failed to add role ${sableRole.name}\n`
+                            }
                         }
                     }
 
-                    if (userInfo.divisions.sable && sableRole && !member.roles.cache.find(role => role.name == sableRole?.name)) {
-                        try {
-                            await member.roles.add(sableRole)
-                            return_str += `added role ${sableRole.name}\n`
-                        } catch (e) {
-                            return_str += `failed to add role ${sableRole.name}\n`
-                        }
-                    }
 
                     if (return_str === "") {
                         return_str = "no roles to add!"
