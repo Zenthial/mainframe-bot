@@ -5,7 +5,7 @@ import { checkVerified } from "../verification_requests.js";
 
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()
-        .setName('wij-verify')
+        .setName('get-roles')
         .setDescription('attempts to verify you in the WIJ Mainframe database')
 
     static execute = async function (interaction: CommandInteraction) {
@@ -17,10 +17,11 @@ export class Command {
             let userInfo = await getUserInfo(userId);
 
             if (userInfo != null) {
-                let rankRole = interaction.guild?.roles.cache.find(role => role.name === userInfo?.name)
+                let rankRole = interaction.guild?.roles.cache.find(role => role.name === userInfo?.rank)
                 if (rankRole) {
                     let member = interaction.member as GuildMember
                     member.roles.add(rankRole);
+                    member.setNickname(userInfo.name);
 
                     await interaction.reply({ content: `added role ${rankRole.name}`, ephemeral: true })
                 } else {
