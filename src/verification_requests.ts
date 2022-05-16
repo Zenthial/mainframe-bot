@@ -20,7 +20,7 @@ export async function checkVerified(discord_id: string | undefined): Promise<num
 }
 
 export async function handleVerificationRequest(interaction: ButtonInteraction) {
-    let discord_id = interaction.client.user?.id;
+    let discord_id = interaction.member?.user?.id;
     if (discord_id) {
         let { data } = await axios.get(`http://127.0.0.1:8080/verify/code/${discord_id}`);
 

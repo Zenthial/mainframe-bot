@@ -18,12 +18,52 @@ export class Command {
 
             if (userInfo != null) {
                 let rankRole = interaction.guild?.roles.cache.find(role => role.name === userInfo?.rank)
-                if (rankRole) {
-                    let member = interaction.member as GuildMember
-                    member.roles.add(rankRole);
-                    member.setNickname(userInfo.name);
+                let stRole = interaction.guild?.roles.cache.find(role => role.name == "Shock Trooper")
+                let sableRole = interaction.guild?.roles.cache.find(role => role.name == "Sable")
 
-                    await interaction.reply({ content: `added role ${rankRole.name}`, ephemeral: true })
+                if (rankRole) {
+                    let return_str = "";
+                    let member = interaction.member as GuildMember
+
+                    try {
+                        await member.setNickname(userInfo.name);
+                        return_str += `set nickname to ${userInfo.name}\n`
+                    } catch (e) {
+                        return_str += "failed to set nickname due to you having too high of a permission level\n"
+                    }
+
+                    if (!member.roles.cache.find(role => role.name == rankRole?.name)) {
+                        try {
+                            await member.roles.add(rankRole);
+                            return_str += `added role ${rankRole.name}\n`
+                        } catch (e) {
+                            return_str += `failed to add role ${rankRole.name}\n`
+                        }
+                    }
+
+                    if (userInfo.divisions.st && stRole && !member.roles.cache.find(role => role.name == stRole?.name)) {
+                        try {
+                            await member.roles.add(stRole);
+                            return_str += `added role ${stRole.name}\n`
+                        } catch (e) {
+                            return_str += `failed to add role ${stRole.name}\n`
+                        }
+                    }
+
+                    if (userInfo.divisions.sable && sableRole && !member.roles.cache.find(role => role.name == sableRole?.name)) {
+                        try {
+                            await member.roles.add(sableRole)
+                            return_str += `added role ${sableRole.name}\n`
+                        } catch (e) {
+                            return_str += `failed to add role ${sableRole.name}\n`
+                        }
+                    }
+
+                    if (return_str === "") {
+                        return_str = "no roles to add!"
+                    }
+
+                    await interaction.reply({ content: return_str, ephemeral: true })
                 } else {
                     await interaction.reply({ content: `unable to add rank role for rank ${userInfo.rank}`, ephemeral: true })
                 }
