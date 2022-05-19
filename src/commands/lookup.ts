@@ -24,6 +24,7 @@ export class Command {
         )
 
     static execute = async function (interaction: CommandInteraction) {
+        await interaction.deferReply()
         const user = interaction.options.getUser("user-input");
 
         if (user == null) return await interaction.reply("failed to find user");

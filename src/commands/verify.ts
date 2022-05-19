@@ -8,6 +8,7 @@ export class Command {
         .setDescription('attempts to verify you in the WIJ Mainframe database')
 
     static execute = async function (interaction: CommandInteraction) {
+        await interaction.deferReply()
         let userId = await checkVerified(interaction.member?.user.id);
 
         if (userId != -1) {
