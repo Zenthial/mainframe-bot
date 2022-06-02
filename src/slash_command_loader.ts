@@ -3,6 +3,7 @@ import { Routes } from "discord-api-types/v9"
 import { Collection } from "discord.js"
 import fs from "node:fs"
 import path from "node:path"
+import { CLIENT_ID, DISCORD_TOKEN, GUILD_ID } from "./secrets.js"
 import { CommandInterface } from "./types/command_interface.js"
 
 export async function load_slash_commands(): Promise<Collection<string, CommandInterface>> {
@@ -19,14 +20,14 @@ export async function load_slash_commands(): Promise<Collection<string, CommandI
         commandsCollection.set(command.data.name, command)
     }
 
-    const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
+    const rest = new REST().setToken(DISCORD_TOKEN);
 
     await (async () => {
         try {
             console.log("Started refreshing application (/) commands.");
 
             await rest.put(
-                Routes.applicationGuildCommands(process.env.CLIENT_ID!, process.env.GUILD_ID!),
+                Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
                 { body: commands },
             );
 

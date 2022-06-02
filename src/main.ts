@@ -1,10 +1,7 @@
 import { Client, Collection, Intents } from "discord.js"
-import dotenv from "dotenv"
+import { DISCORD_TOKEN } from "./secrets.js"
 import { load_slash_commands } from "./slash_command_loader.js"
 import { CommandInterface } from "./types/command_interface.js"
-import { handleVerificationRequest } from "./verification_requests.js"
-
-dotenv.config()
 
 async function main() {
     const commandsCollection: Collection<string, CommandInterface> = await load_slash_commands()
@@ -34,17 +31,7 @@ async function main() {
         }
     })
 
-    client.on("interactionCreate", async interaction => {
-        if (!interaction.isButton()) return;
-
-        if (interaction.customId === "verifyYes") {
-            await handleVerificationRequest(interaction)
-        } else if (interaction.customId === "verifyNo") {
-            interaction.reply({ content: "okay, feel free to verify whenever!", ephemeral: true })
-        }
-    })
-
-    client.login(process.env.DISCORD_TOKEN)
+    client.login(DISCORD_TOKEN)
 }
 
 main()
