@@ -19,7 +19,7 @@ export async function load_slash_commands(): Promise<Collection<string, CommandI
         commandsCollection.set(command.data.name, command)
     }
 
-    const rest = new REST({ version: "9" }).setToken(process.env.DISCORD_TOKEN!);
+    const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
 
     await (async () => {
         try {
