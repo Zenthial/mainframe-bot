@@ -30,11 +30,11 @@ export class Command {
                 let embed = new MessageEmbed()
                     .setTitle(`${userInfo.rank} ${userInfo?.name}`)
                     .setColor("#2C81B9")
-                    .setDescription(`${userInfo.rank} ${userInfo.points} cP`)
+                    .setDescription(`${userInfo.rank} ${userInfo.points} battlePoints`)
                     .setThumbnail(await getHeadshot(userId))
 
                 if (userInfo.floor_points != null && userInfo.goal_points != null) {
-                    embed.addField(`Progress to your next promotion (${userInfo.goal_points} cP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
+                    embed.addField(`Progress to your next promotion (${userInfo.goal_points} bP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
                 }
 
                 if (userInfo.divisions != null) {
