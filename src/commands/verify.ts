@@ -13,10 +13,10 @@ export class Command {
         )
 
     static execute = async function (interaction: CommandInteraction) {
-        await interaction.deferReply()
+        await interaction.deferReply({ ephemeral: true })
         const user = interaction.options.getString("username");
 
-        if (user == null) return await interaction.reply("failed to find user");
+        if (user == null) return await interaction.editReply("failed to find user");
 
         await handleVerificationRequest(user, interaction);
     }

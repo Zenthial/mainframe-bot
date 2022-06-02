@@ -9,11 +9,11 @@ export class Command {
         .setDescription('attempts to verify you in the WIJ Mainframe database')
 
     static execute = async function (interaction: CommandInteraction) {
-        await interaction.deferReply()
+        await interaction.deferReply({ ephemeral: true })
         let userId = await checkVerified(interaction.member?.user.id);
 
         if (userId == -1) {
-            await interaction.reply({ content: "please run /verify to register your account", ephemeral: true }) // need to add a reverify feature
+            await interaction.editReply("please run /wij-verify to register your account") // need to add a reverify feature
         } else {
             let userInfo = await getUserInfo(userId);
 
@@ -67,9 +67,9 @@ export class Command {
                         return_str = "no roles to add!"
                     }
 
-                    await interaction.reply({ content: return_str, ephemeral: true })
+                    await interaction.editReply(return_str)
                 } else {
-                    await interaction.reply({ content: `unable to add rank role for rank ${userInfo.rank}`, ephemeral: true })
+                    await interaction.editReply(`unable to add rank role for rank ${userInfo.rank}`)
                 }
             }
         }

@@ -28,10 +28,10 @@ export async function handleVerificationRequest(username: string, interaction: C
     if (discord_id) {
         let { data } = await axios.put(`http://127.0.0.1:8080/verify/`, body);
 
-        if (data && data.code) {
-            await interaction.reply({ content: `you have 5 minutes to verify here: https://www.roblox.com/games/9643349323/WIJ-Verification`, ephemeral: true })
+        if (data == `temporarily linked ${discord_id} to ${username}`) {
+            await interaction.editReply(`you have 5 minutes to verify here: https://www.roblox.com/games/9643349323/WIJ-Verification`)
         } else {
-            await interaction.reply({ content: `failed to add to the database\n${data}`, ephemeral: true })
+            await interaction.editReply(`failed to add to the database\n${data}`)
         }
     }
 }

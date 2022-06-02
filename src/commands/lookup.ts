@@ -24,15 +24,15 @@ export class Command {
         )
 
     static execute = async function (interaction: CommandInteraction) {
-        await interaction.deferReply()
+        await interaction.deferReply({ ephemeral: true })
         const user = interaction.options.getUser("user-input");
 
-        if (user == null) return await interaction.reply("failed to find user");
+        if (user == null) return await interaction.editReply("failed to find user");
 
         let userId = await checkVerified(user.id);
 
         if (userId == -1) {
-            await interaction.reply({ content: "the user you looked up is not verified", ephemeral: true }) // need to add a reverify feature
+            await interaction.editReply("the user you looked up is not verified") // need to add a reverify feature
         } else {
             let userInfo = await getUserInfo(userId);
 
@@ -59,7 +59,7 @@ export class Command {
 
                 embed.setTimestamp()
 
-                await interaction.reply({ embeds: [embed] })
+                await interaction.editReply({ embeds: [embed] })
             }
         }
     }
