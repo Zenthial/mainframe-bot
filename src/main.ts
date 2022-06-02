@@ -9,6 +9,10 @@ dotenv.config()
 async function main() {
     const commandsCollection: Collection<string, CommandInterface> = await load_slash_commands()
 
+    process.on("uncaughtException", async unhandledError => {
+        console.warn(unhandledError)
+    })
+
     const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 
     client.on("ready", () => {
