@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
+import { createEmbed } from "../functions/createEmbed";
 import { getHeadshot, getUserInfo } from "../user_info_requests";
 import { checkVerified } from "../verification_requests";
 
@@ -24,7 +25,7 @@ export class Command {
         )
 
     static execute = async function (interaction: CommandInteraction) {
-        await interaction.deferReply({ ephemeral: true })
+        await interaction.deferReply()
         const user = interaction.options.getUser("user-input");
 
         if (user == null) return await interaction.editReply("failed to find user");
@@ -37,29 +38,9 @@ export class Command {
             let userInfo = await getUserInfo(userId);
 
             if (userInfo != null) {
-                let embed = new MessageEmbed()
-                    .setTitle(`${userInfo.rank} ${userInfo?.name}`)
-                    .setColor("#2C81B9")
-                    .setDescription(`${userInfo.points} battlePoints`)
-                    .setThumbnail(await getHeadshot(userId))
+                let userInfoEmbed = await createEmbed(userId, userInfo);
 
-                if (userInfo.floor_points != null && userInfo.goal_points != null) {
-                    embed.addField(`Progress to your next promotion (${userInfo.goal_points} bP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
-                }
-
-                if (userInfo.divisions != null) {
-                    if (userInfo.divisions.st != null) {
-                        embed.addField("**WIJST**", userInfo.divisions.st, true)
-                    }
-
-                    if (userInfo.divisions.sable != null) {
-                        embed.addField("**SABLE**", userInfo.divisions.sable, true)
-                    }
-                }
-
-                embed.setTimestamp()
-
-                await interaction.editReply({ embeds: [embed] })
+                await interaction.editReply({ embeds: [userInfoEmbed] })
             }
         }
     }
