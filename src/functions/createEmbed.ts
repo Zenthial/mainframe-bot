@@ -1,5 +1,6 @@
-import { MessageEmbed } from "discord.js"
-import { UserInfo, getHeadshot } from "../user_info_requests"
+import { CommandInteraction, MessageAttachment, MessageEmbed } from "discord.js"
+import { createHexagon } from "./createHexagon"
+import { UserInfo, getHeadshot } from "./user_info_requests"
 
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
     let percent = Math.round(((Number(cP - currentRankCPRequirement)) / Number(promotionCPRequirement - currentRankCPRequirement)) * 100)
@@ -11,12 +12,16 @@ function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequ
     return retStr;
 }
 
-export async function createEmbed(userId: number, userInfo: UserInfo): Promise<MessageEmbed> {
+export async function createEmbed(userId: number, userInfo: UserInfo, interaction: CommandInteraction) {
+    const profileBuffer = await createHexagon(userId)
+    const attachment = new MessageAttachment(profileBuffer, `profileCanvas${userId}.png`)
+
     let embed = new MessageEmbed()
         .setTitle(`${userInfo.rank} ${userInfo?.name}`)
+        .setURL(`https://www.roblox.com/users/${userId}/profile`)
         .setColor("#2C81B9")
         .setDescription(`${userInfo.rank} ${userInfo.points} battlePoints`)
-        .setThumbnail(await getHeadshot(userId))
+        .setThumbnail(`attachment://profileCanvas${userId}.png`)
 
     if (userInfo.floor_points != null && userInfo.goal_points != null) {
         embed.addField(`Progress to your next promotion (${userInfo.goal_points} bP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
@@ -42,6 +47,7 @@ export async function createEmbed(userId: number, userInfo: UserInfo): Promise<M
     }
 
     embed.setTimestamp()
+    embed.setFooter({ text: "Mainframe", iconURL: "https://tr.rbxcdn.com/06438e6203c5f222fe47d45e9e6941e2/150/150/Image/Png" })
 
-    return embed
+    await interaction.reply({ embeds: [embed], files: [attachment] })
 }

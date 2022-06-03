@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { createEmbed } from "../functions/createEmbed";
-import { getHeadshot, getUserInfo } from "../user_info_requests";
-import { checkVerified } from "../verification_requests";
+import { getHeadshot, getUserInfo } from "../functions/user_info_requests";
+import { checkVerified } from "../functions/verification_requests";
 
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
     let percent = Math.round(((Number(cP - currentRankCPRequirement)) / Number(promotionCPRequirement - currentRankCPRequirement)) * 100)
@@ -25,22 +25,20 @@ export class Command {
         )
 
     static execute = async function (interaction: CommandInteraction) {
-        await interaction.deferReply()
+        // await interaction.deferReply()
         const user = interaction.options.getUser("user-input");
 
-        if (user == null) return await interaction.editReply("failed to find user");
+        if (user == null) return await interaction.reply("failed to find user");
 
         let userId = await checkVerified(user.id);
 
         if (userId == -1) {
-            await interaction.editReply("the user you looked up is not verified") // need to add a reverify feature
+            await interaction.reply("the user you looked up is not verified") // need to add a reverify feature
         } else {
             let userInfo = await getUserInfo(userId);
 
             if (userInfo != null) {
-                let userInfoEmbed = await createEmbed(userId, userInfo);
-
-                await interaction.editReply({ embeds: [userInfoEmbed] })
+                await createEmbed(userId, userInfo, interaction);
             }
         }
     }

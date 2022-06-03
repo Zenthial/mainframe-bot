@@ -33,7 +33,7 @@ export async function getUserInfo(roblox_id: number): Promise<UserInfo | null> {
 }
 
 export async function getHeadshot(userId: number): Promise<string> {
-    let { data } = await axios.get(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=352x352&format=Png`)
+    let { data } = await axios.get(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${userId}&size=420x420&format=Png`)
 
     let info = data as HeadshotPayload;
     if (info.data[0].state === "Completed") {

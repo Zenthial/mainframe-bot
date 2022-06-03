@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { createEmbed } from "../functions/createEmbed";
-import { getHeadshot, getUserInfo } from "../user_info_requests";
-import { checkVerified } from "../verification_requests";
+import { getHeadshot, getUserInfo } from "../functions/user_info_requests";
+import { checkVerified } from "../functions/verification_requests";
 
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()
@@ -18,9 +18,7 @@ export class Command {
             let userInfo = await getUserInfo(userId);
 
             if (userInfo != null) {
-                let userInfoEmbed = await createEmbed(userId, userInfo);
-
-                await interaction.reply({ embeds: [userInfoEmbed] })
+                await createEmbed(userId, userInfo, interaction);
             } else {
                 await interaction.reply({ content: "failed to get userInfo", ephemeral: true })
             }
