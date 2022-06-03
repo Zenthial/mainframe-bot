@@ -1,6 +1,6 @@
 import { CommandInteraction, MessageAttachment, MessageEmbed } from "discord.js"
 import { createHexagon } from "./createHexagon"
-import { UserInfo, getHeadshot } from "./user_info_requests"
+import { UserInfo, getHeadshot } from "./userInfoRequests"
 
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
     let percent = Math.round(((Number(cP - currentRankCPRequirement)) / Number(promotionCPRequirement - currentRankCPRequirement)) * 100)

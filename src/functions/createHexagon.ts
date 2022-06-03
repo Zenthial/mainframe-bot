@@ -1,6 +1,6 @@
 import path from 'path'
 import { createCanvas, loadImage } from 'canvas'
-import { getHeadshot } from './user_info_requests'
+import { getHeadshot } from './userInfoRequests'
 const width = 420
 const height = 420
 const canvas = createCanvas(width, height)

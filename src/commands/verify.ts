@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageActionRow, MessageButton } from "discord.js";
-import { checkVerified, handleVerificationRequest } from "../functions/verification_requests.js";
+import { checkVerified, handleVerificationRequest } from "../functions/verificationRequests.js";
 
 export class Command {
     static data = new SlashCommandBuilder()

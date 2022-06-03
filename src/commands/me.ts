@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { createEmbed } from "../functions/createEmbed";
-import { getHeadshot, getUserInfo } from "../functions/user_info_requests";
-import { checkVerified } from "../functions/verification_requests";
+import { getHeadshot, getUserInfo } from "../functions/userInfoRequests";
+import { checkVerified } from "../functions/verificationRequests";
 
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()

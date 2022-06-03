@@ -1,8 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import { createEmbed } from "../functions/createEmbed";
-import { getHeadshot, getUserInfo } from "../functions/user_info_requests";
-import { checkVerified } from "../functions/verification_requests";
+import { getHeadshot, getUserInfo } from "../functions/userInfoRequests";
+import { checkVerified } from "../functions/verificationRequests";
 
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
     let percent = Math.round(((Number(cP - currentRankCPRequirement)) / Number(promotionCPRequirement - currentRankCPRequirement)) * 100)

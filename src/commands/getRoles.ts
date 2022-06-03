@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { CommandInteraction, GuildMember } from "discord.js";
-import { getUserInfo } from "../functions/user_info_requests.js";
-import { checkVerified } from "../functions/verification_requests.js";
+import { getUserInfo } from "../functions/userInfoRequests.js";
+import { checkVerified } from "../functions/verificationRequests.js";
 
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()
