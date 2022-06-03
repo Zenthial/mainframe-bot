@@ -13,15 +13,15 @@ function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequ
 }
 
 export async function createEmbed(userId: number, userInfo: UserInfo, interaction: CommandInteraction) {
-    const profileBuffer = await createHexagon(userId)
-    const attachment = new MessageAttachment(profileBuffer, `profileCanvas${userId}.png`)
+    // const profileBuffer = await createHexagon(userId)
+    // const attachment = new MessageAttachment(profileBuffer, `profileCanvas${userId}.png`)
 
     let embed = new MessageEmbed()
         .setTitle(`${userInfo.rank} ${userInfo?.name}`)
         .setURL(`https://www.roblox.com/users/${userId}/profile`)
         .setColor("#2C81B9")
         .setDescription(`${userInfo.rank} ${userInfo.points} battlePoints`)
-        .setThumbnail(`attachment://profileCanvas${userId}.png`)
+        .setThumbnail(await getHeadshot(userId))
 
     if (userInfo.floor_points != null && userInfo.goal_points != null) {
         embed.addField(`Progress to your next promotion (${userInfo.goal_points} bP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
@@ -49,5 +49,5 @@ export async function createEmbed(userId: number, userInfo: UserInfo, interactio
     embed.setTimestamp()
     embed.setFooter({ text: "Mainframe", iconURL: "https://tr.rbxcdn.com/06438e6203c5f222fe47d45e9e6941e2/150/150/Image/Png" })
 
-    await interaction.reply({ embeds: [embed], files: [attachment] })
+    await interaction.reply({ embeds: [embed] /*, files: [attachment]*/ })
 }
