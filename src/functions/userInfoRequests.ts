@@ -56,7 +56,20 @@ export async function getUserIdByUsername(username: string): Promise<number> {
 export async function addPoints(username: string, points: number, event: boolean): Promise<boolean> {
     let userId = await getUserIdByUsername(username)
     if (userId != -1) {
-        return await axios.post(`http://127.0.0.1:8080/users/${userId}`, { points_to_add: points, event: event }).then(response => {
+        return await axios.post(`http://127.0.0.1:8080/users/add/${userId}`, { points_to_add: points, event: event }).then(response => {
+            return true
+        }).catch(e => {
+            return false
+        })
+    }
+
+    return false
+}
+
+export async function removePoints(username: string, points: number): Promise<boolean> {
+    let userId = await getUserIdByUsername(username)
+    if (userId != -1) {
+        return await axios.post(`http://127.0.0.1:8080/users/remove/${userId}`, { points_to_remove: points }).then(response => {
             return true
         }).catch(e => {
             return false
