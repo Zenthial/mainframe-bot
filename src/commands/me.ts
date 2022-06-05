@@ -7,7 +7,7 @@ import { checkVerified } from "../functions/verificationRequests";
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()
         .setName('me')
-        .setDescription('Replies with your user info!')
+        .setDescription('replies with your user info!')
 
     static execute = async function (interaction: CommandInteraction) {
         let userId = await checkVerified(interaction.member?.user.id);

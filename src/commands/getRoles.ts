@@ -6,7 +6,7 @@ import { checkVerified } from "../functions/verificationRequests.js";
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()
         .setName('get-roles')
-        .setDescription('attempts to verify you in the WIJ Mainframe database')
+        .setDescription('attempts to update your discord roles')
 
     static execute = async function (interaction: CommandInteraction) {
         await interaction.deferReply({ ephemeral: true })
@@ -27,7 +27,7 @@ export class Command {
                     let member = interaction.member as GuildMember
 
                     try {
-                        await member.setNickname(userInfo.name);
+                        await member.setNickname(`[${rankRole.name}] userInfo.name`);
                         return_str += `set nickname to ${userInfo.name}\n`
                     } catch (e) {
                         return_str += "failed to set nickname due to you having too high of a permission level\n"
