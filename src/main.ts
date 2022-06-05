@@ -36,8 +36,10 @@ async function main() {
         if (!interaction.isModalSubmit()) return;
 
         let interaction_split = interaction.customId.split("-")
-        if (interaction_split[0] === "userInputModel") {
-            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]))
+        if (interaction_split[0] === "userInputEventsModal") {
+            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), true)
+        } else if (interaction_split[0] === "userInputPointsModal") {
+            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), false)
         }
     })
 

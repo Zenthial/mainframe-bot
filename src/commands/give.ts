@@ -3,36 +3,35 @@ import { CommandInteraction, GuildMemberRoleManager, MessageActionRow, MessageAc
 
 export class Command {
     static data = new SlashCommandBuilder()
-        .setName('add')
-        .setDescription('adds an event to a user')
+        .setName('give')
+        .setDescription('gives points to a user')
         .addNumberOption(option =>
-            option.setName("event-type")
-                .setDescription("the event to be added to the user")
+            option.setName("points")
+                .setDescription("the number of points to give")
                 .setRequired(true)
-                .addChoices({ name: "raid", value: 5 }, { name: "defense", value: 5 }, { name: "training", value: 3 })
         )
 
     static execute = async function (interaction: CommandInteraction) {
         let roleManager = interaction.member?.roles as GuildMemberRoleManager;
-        let hasAdminRole = roleManager.cache.find(role => role.name === "Marshal" || role.name === "Colonel" || role.name === "Lieutenant" || role.name === "Captain" || role.name === "Administrator");
+        let hasAdminRole = roleManager.cache.find(role => role.name === "Administrator");
 
         if (!hasAdminRole) {
             await interaction.reply("you do not have an officer role")
             return;
         }
 
-        const event_type = interaction.options.getNumber("event-type")
+        const points = interaction.options.getNumber("points")
 
-        if (event_type == null) return await interaction.reply("failed to get event type")
+        if (points == null) return await interaction.reply("failed to get event type")
 
         const modal = new Modal()
-            .setCustomId(`userInputEventsModal-${event_type}`)
+            .setCustomId(`userInputPointsModal-${points}`)
             .setTitle("user input")
 
         const userInput = new TextInputComponent()
             .setCustomId("userInput")
             // The label is the prompt the user sees for this input
-            .setLabel("Who was at your event?")
+            .setLabel("Who would you like to give points to?")
             // Short means only a single line of text
             .setStyle('SHORT');
 
