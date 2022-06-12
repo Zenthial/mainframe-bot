@@ -22,7 +22,7 @@ export async function checkVerified(discord_id: string | undefined): Promise<num
 export async function handleVerificationRequest(username: string, interaction: CommandInteraction) {
     let discord_id = interaction.member?.user?.id;
     let body = {
-        username: username,
+        username: username, // Is there a reason we pass the username to the backend? Couldn't we go to roblox and get the userid of this user first? (Would also help to provide a preverified option)
         discord_id: discord_id,
     }
     if (discord_id) {

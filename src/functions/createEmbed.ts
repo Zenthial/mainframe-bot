@@ -51,3 +51,10 @@ export async function createEmbed(userId: number, userInfo: UserInfo, interactio
 
     await interaction.reply({ embeds: [embed] /*, files: [attachment]*/ })
 }
+
+// export function createEmbed() {
+//     let embed = new MessageEmbed()
+//     embed.setTimestamp()
+//     embed.setFooter({ text: "Mainframe", iconURL: "https://tr.rbxcdn.com/06438e6203c5f222fe47d45e9e6941e2/150/150/Image/Png" })
+//     return embed
+// }
