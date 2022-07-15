@@ -6,14 +6,14 @@ import { checkVerified } from "../functions/verificationRequests";
 
 export class Command {
     static data: SlashCommandBuilder = new SlashCommandBuilder()
-        .setName('me')
+        .setName('career')
         .setDescription('replies with your user info!')
 
     static execute = async function (interaction: CommandInteraction) {
         let userId = await checkVerified(interaction.member?.user.id);
 
         if (userId == -1) {
-            await interaction.reply({ content: "please run /verify to register your account", ephemeral: true }) // need to add a reverify feature
+            await interaction.reply({ content: "please run /wij-verify to register your account", ephemeral: true }) // need to add a reverify feature
         } else {
             let userInfo = await getUserInfo(userId);
 
