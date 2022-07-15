@@ -20,7 +20,7 @@ export async function createEmbed(userId: number, userInfo: UserInfo, interactio
         .setTitle(`${userInfo.rank} ${userInfo?.name}`)
         .setURL(`https://www.roblox.com/users/${userId}/profile`)
         .setColor("#2C81B9")
-        .setDescription(`${userInfo.rank} ${userInfo.points} battlePoints`)
+        .setDescription(`${userInfo.rank} ${userInfo.points} **battlePoints**`)
         .setThumbnail(await getHeadshot(userId))
 
     if (userInfo.floor_points != null && userInfo.goal_points != null) {

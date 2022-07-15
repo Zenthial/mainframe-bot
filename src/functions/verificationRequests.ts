@@ -9,14 +9,16 @@ interface VerifyPayload {
 export async function checkVerified(discord_id: string | undefined): Promise<number> {
     if (typeof discord_id === undefined) return -1;
 
-    let { data } = await axios.get(`http://127.0.0.1:8080/verify/${discord_id}`);
-
-    if (data && data.roblox_id) {
-        return data.roblox_id
-    } else {
+    return await axios.get(`http://127.0.0.1:8080/verify/${discord_id}`).then(response => {
+        let data = response.data
+        if (data && data.roblox_id) {
+            return data.roblox_id
+        } else {
+            return -1
+        }
+    }).catch(_ => {
         return -1
-    }
-
+    });
 }
 
 export async function handleVerificationRequest(username: string, interaction: CommandInteraction) {
