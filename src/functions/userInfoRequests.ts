@@ -23,13 +23,16 @@ export interface HeadshotPayload {
 }
 
 export async function getUserInfo(roblox_id: number): Promise<UserInfo | null> {
-    let { data } = await axios.get(`http://127.0.0.1:8080/users/${roblox_id}`);
-
-    if (data) {
-        return data
-    } else {
+    return await axios.get(`http://127.0.0.1:8080/users/${roblox_id}`).then(response => {
+        let data = response.data
+        if (data) {
+            return data
+        } else {
+            return null
+        }
+    }).catch(e => {
         return null
-    }
+    })
 }
 
 export async function getHeadshot(userId: number): Promise<string> {

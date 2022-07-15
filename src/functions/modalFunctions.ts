@@ -14,9 +14,8 @@ export async function userInputModelFunction(interaction: ModalSubmitInteraction
 
     let usersArray = new Array<PointsUserPayload>();
     for (let value of usersSplit) {
-        let user = value.trim()
         usersArray.push({
-            username: user,
+            username: value.trim(),
             increment: points,
             add_event: addEvent
         })
