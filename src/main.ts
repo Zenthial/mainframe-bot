@@ -1,5 +1,5 @@
 import { Client, Collection, Intents } from "discord.js"
-import { removePointsModalFunction, userInputModelFunction } from "./functions/modalFunctions.js"
+import { userInputModelFunction } from "./functions/modalFunctions.js"
 import { DISCORD_TOKEN } from "./secrets.js"
 import { load_slash_commands } from "./slash_command_loader.js"
 import { CommandInterface } from "./types/command_interface.js"
@@ -44,8 +44,6 @@ async function main() {
             await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), true)
         } else if (interaction_split[0] === "userInputPointsModal") {
             await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), false)
-        } else if (interaction_split[0] === "userInputRemovePointsModal") {
-            await removePointsModalFunction(interaction, Number.parseInt(interaction_split[1]))
         }
     })
 
