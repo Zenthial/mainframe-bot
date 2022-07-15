@@ -24,16 +24,14 @@ export async function checkVerified(discord_id: string | undefined): Promise<num
 export async function handleVerificationRequest(username: string, interaction: CommandInteraction) {
     let discord_id = interaction.member?.user?.id;
     let body = {
-        username: username,
+        roblox_username: username,
         discord_id: discord_id,
     }
     if (discord_id) {
-        let { data } = await axios.put(`http://127.0.0.1:8080/verify/`, body);
-
-        if (data == `temporarily linked ${discord_id} to ${username}`) {
-            await interaction.editReply(`you have 5 minutes to verify here: https://www.roblox.com/games/9643349323/WIJ-Verification`)
-        } else {
-            await interaction.editReply(`failed to add to the database\n${data}`)
-        }
+        await axios.put(`http://127.0.0.1:8080/verify/`, body).then(async () => {
+            await interaction.editReply(`you have 5 minutes to verify here: https://www.roblox.com/games/9643349323/WIJ-Verification`);
+        }).catch(async e => {
+            await interaction.editReply(`failed to add to the database\n${e}`)
+        });
     }
 }
