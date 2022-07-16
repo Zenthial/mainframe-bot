@@ -3,8 +3,13 @@ import { createHexagon } from "./createHexagon"
 import { UserInfo, getHeadshot } from "./userInfoRequests"
 
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
+    if (promotionCPRequirement < cP) {
+        cP = promotionCPRequirement
+    }
     let percent = Math.round(((Number(cP - currentRankCPRequirement)) / Number(promotionCPRequirement - currentRankCPRequirement)) * 100)
     let multiNumb = Math.floor(percent / 10)
+    console.log(promotionCPRequirement, currentRankCPRequirement, multiNumb)
+    if (multiNumb == null) { multiNumb = 0 }
 
     let retStr = ":ballot_box_with_check: ".repeat(multiNumb) + ":black_square_button: ".repeat(10 - multiNumb)
     retStr += "**" + percent + "%**";
