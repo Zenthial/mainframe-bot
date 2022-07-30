@@ -1,6 +1,6 @@
-import { CommandInteraction, MessageAttachment, MessageEmbed } from "discord.js"
-import { createHexagon } from "./createHexagon"
-import { UserInfo, getHeadshot } from "./userInfoRequests"
+import { MessageEmbed } from "discord.js"
+import { SlidingView } from "../util/sliding_view"
+import { UserInfo, getHeadshot, BPLog, getUsernameFromUserId } from "./userInfoRequests"
 
 function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequirement: number): string { // From the opensource clan labs bot.
     if (promotionCPRequirement < cP) {
@@ -17,16 +17,13 @@ function createBar(cP: number, promotionCPRequirement: number, currentRankCPRequ
     return retStr;
 }
 
-export async function createEmbed(userId: number, userInfo: UserInfo, interaction: CommandInteraction) {
-    // const profileBuffer = await createHexagon(userId)
-    // const attachment = new MessageAttachment(profileBuffer, `profileCanvas${userId}.png`)
-
+export async function createCareerEmbed(userInfo: UserInfo): Promise<MessageEmbed> {
     let embed = new MessageEmbed()
         .setTitle(`${userInfo.rank} ${userInfo?.name}`)
-        .setURL(`https://www.roblox.com/users/${userId}/profile`)
+        .setURL(`https://www.roblox.com/users/${userInfo.user_id}/profile`)
         .setColor("#2C81B9")
         .setDescription(`${userInfo.rank} ${userInfo.points} **battlePoints**`)
-        .setThumbnail(await getHeadshot(userId))
+        .setThumbnail(await getHeadshot(userInfo.user_id))
 
     if (userInfo.floor_points != null && userInfo.goal_points != null) {
         embed.addField(`Progress to your next promotion (${userInfo.goal_points} bP Required)`, createBar(userInfo.points, userInfo.goal_points!, userInfo.floor_points!))
@@ -54,5 +51,64 @@ export async function createEmbed(userId: number, userInfo: UserInfo, interactio
     embed.setTimestamp()
     embed.setFooter({ text: "Mainframe", iconURL: "https://tr.rbxcdn.com/06438e6203c5f222fe47d45e9e6941e2/150/150/Image/Png" })
 
-    await interaction.reply({ embeds: [embed] /*, files: [attachment]*/ })
+    return embed
+}
+
+const MAX_LOGS = 6
+
+function getEvent(amount: number): string {
+    if (amount == 3) {
+        return "Training"
+    } else if (amount == 4) {
+        return "Defense"
+    } else if (amount == 5) {
+        return "Raid"
+    } else {
+        return "Unknown"
+    }
+}
+
+let monthTable = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+function parseData(date: string): string {
+    let split = date.split(" ")
+    let date_split = split[0].split("-")
+    let year = date_split[0]
+    let month = Number.parseInt(date_split[1])
+    let day = Number.parseInt(date_split[2])
+
+    let monthString = monthTable[month]
+
+    return `${monthString} ${day}, ${year} @ ${split[1].substring(0, 5)}`
+}
+
+export async function createLogsEmbed(userInfo: UserInfo, logs_view: SlidingView<BPLog>, direction: boolean) {
+    let log: BPLog | null
+    if (direction) {
+        log = logs_view.next()
+    } else {
+        log = logs_view.previous()
+    }
+
+    if (log != null) {
+        let sign = log.amount > 0 ? "+" : "-"
+        let embed = new MessageEmbed()
+            .setTitle(`BattlePoint Log`)
+            .setColor("#facc28")
+            .setDescription(`${getEvent(log.amount).toUpperCase()}`)
+            .setThumbnail(await getHeadshot(log.awarder))
+            .addField(`AWARDED ${sign}${log.amount} bP`, `By [${await getUsernameFromUserId(log.awarder)}](https://www.roblox.com/users/${userInfo.user_id}/profile) on ${parseData(log.time)}`)
+
+            .setTimestamp()
+
+        if (log.place_name != null) {
+            embed.addField("PLACE", `${log.place_name}`)
+        }
+
+        return embed
+    }
+
+    let e = new MessageEmbed()
+    e.setDescription("LOG NOT FOUND")
+    return e
 }

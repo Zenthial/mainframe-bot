@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { CommandInteraction, GuildMemberRoleManager, MessageActionRow, MessageActionRowComponent, Modal, TextInputComponent } from "discord.js";
+import { checkVerified } from '../functions/verificationRequests';
 
 export class Command {
     static data = new SlashCommandBuilder()
@@ -22,10 +23,15 @@ export class Command {
 
         const points = interaction.options.getNumber("points")
 
-        if (points == null) return await interaction.reply("failed to get event type")
+        if (points == null) return await interaction.reply("failed to get points")
+
+        let rbx_user_id = await checkVerified(interaction.member?.user.id);
+        if (rbx_user_id == -1) {
+            await interaction.reply("you are not verified. please run /wij-verify")
+        }
 
         const modal = new Modal()
-            .setCustomId(`userInputRemovePointsModal-${points}`)
+            .setCustomId(`userInputRemovePointsModal-${points}-${rbx_user_id}`)
             .setTitle("user input")
 
         const userInput = new TextInputComponent()
@@ -37,7 +43,7 @@ export class Command {
 
         let array = new Array<TextInputComponent>()
         array.push(userInput)
-        const firstActionRow = new MessageActionRow().addComponents(array);
+        const firstActionRow = new MessageActionRow<TextInputComponent>().addComponents(array);
 
         modal.addComponents(firstActionRow)
 

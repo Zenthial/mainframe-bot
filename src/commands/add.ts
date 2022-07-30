@@ -1,5 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, GuildMemberRoleManager, MessageActionRow, MessageActionRowComponent, Modal, TextInputComponent } from "discord.js";
+import { CommandInteraction, GuildMemberRoleManager, MessageActionRow, Modal, TextInputComponent } from "discord.js";
+import { checkVerified } from '../functions/verificationRequests';
 
 export class Command {
     static data = new SlashCommandBuilder()
@@ -9,7 +10,7 @@ export class Command {
             option.setName("event-type")
                 .setDescription("the event to be added to the user")
                 .setRequired(true)
-                .addChoices({ name: "raid", value: 5 }, { name: "defense", value: 5 }, { name: "training", value: 3 })
+                .addChoices({ name: "raid", value: 5 }, { name: "defense", value: 4 }, { name: "training", value: 3 })
         )
 
     static execute = async function (interaction: CommandInteraction) {
@@ -24,9 +25,13 @@ export class Command {
         const event_type = interaction.options.getNumber("event-type")
 
         if (event_type == null) return await interaction.reply("failed to get event type")
+        let rbx_user_id = await checkVerified(interaction.member?.user.id);
+        if (rbx_user_id == -1) {
+            await interaction.reply("you are not verified. please run /wij-verify")
+        }
 
         const modal = new Modal()
-            .setCustomId(`userInputEventsModal-${event_type}`)
+            .setCustomId(`userInputEventsModal-${event_type}-${rbx_user_id}`)
             .setTitle("user input")
 
         const userInput = new TextInputComponent()
@@ -36,11 +41,15 @@ export class Command {
             // Short means only a single line of text
             .setStyle('SHORT');
 
-        let array = new Array<TextInputComponent>()
-        array.push(userInput)
-        const firstActionRow = new MessageActionRow().addComponents(array);
+        const placeInput = new TextInputComponent()
+            .setCustomId("placeInput")
+            .setLabel("Where was this event?")
+            .setStyle("SHORT")
 
-        modal.addComponents(firstActionRow)
+        const firstActionRow = new MessageActionRow<TextInputComponent>().addComponents(userInput);
+        const secondActionRow = new MessageActionRow<TextInputComponent>().addComponents(placeInput);
+
+        modal.addComponents(firstActionRow, secondActionRow)
 
         await interaction.showModal(modal);
     }

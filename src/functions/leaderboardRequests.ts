@@ -1,17 +1,18 @@
 import axios from "axios";
-import { Queue } from "../util/queue";
+import { SlidingView } from "../util/sliding_view";
+import { UserInfo } from "./userInfoRequests";
 
-export async function getLeaderboardQueue(): Promise<Queue> {
+export async function getLeaderboardView(): Promise<SlidingView<UserInfo>> {
     return await axios.get(`http://127.0.0.1:8080/leaderboard/`).then(response => {
         let data = response.data as [any]
 
-        let queue = new Queue();
+        let view = new SlidingView<UserInfo>();
         for (let val of data.values()) {
-            queue.enqueue(val)
+            view.add(val)
         }
 
-        return queue
+        return view
     }).catch(_ => {
-        return new Queue()
+        return new SlidingView<UserInfo>()
     });
 }

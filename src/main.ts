@@ -30,8 +30,6 @@ async function main() {
         try {
             if (interaction.commandName === "wij-help") {
                 await command.execute(interaction, commandsCollection);
-            } else if (interaction.commandName === "lb") {
-                await command.execute(interaction, lb_state)
             } else {
                 await command.execute(interaction);
             }
@@ -46,9 +44,9 @@ async function main() {
 
         let interaction_split = interaction.customId.split("-")
         if (interaction_split[0] === "userInputEventsModal") {
-            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), true)
-        } else if (interaction_split[0] === "userInputPointsModal") {
-            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), false)
+            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), Number.parseInt(interaction_split[2]), true)
+        } else {
+            await userInputModelFunction(interaction, Number.parseInt(interaction_split[1]), Number.parseInt(interaction_split[2]), false)
         }
     })
 

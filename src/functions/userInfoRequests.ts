@@ -1,6 +1,15 @@
 import axios from "axios"
+import { PointsUserPayload } from "./modalFunctions"
+
+export interface BPLog {
+    time: string,
+    awarder: number,
+    amount: number,
+    place_name?: string,
+}
 
 export interface UserInfo {
+    index: any
     user_id: number,
     name: string,
     points: number,
@@ -10,7 +19,8 @@ export interface UserInfo {
     divisions: {
         st: string | null,
         sable: string | null
-    }
+    },
+    bp_logs: Array<BPLog> | null
 }
 
 export interface Thumbnail {
@@ -56,14 +66,31 @@ export async function getUserIdByUsername(username: string): Promise<number> {
     }
 }
 
-interface PointsUserPayload {
-    username: string,
-    increment: number,
-    add_event: boolean,
+export async function getUsernameFromUserId(user_id: number): Promise<string> {
+    let { data } = await axios.get(`https://users.roblox.com/v1/users/${user_id}`)
+
+    if (data && data.name) {
+        return data.name as string
+    } else {
+        return "Name Unknown"
+    }
 }
 
-export async function incrementPoints(usersArray: Array<PointsUserPayload>): Promise<string> {
-    return await axios.post(`http://127.0.0.1:8080/users/points`, { users: usersArray }).then(response => {
+interface Payload {
+    users: Array<PointsUserPayload>,
+    placeName?: string
+}
+
+export async function incrementPoints(usersArray: Array<PointsUserPayload>, placeName?: string): Promise<string> {
+    let payload: Payload = {
+        users: usersArray
+    }
+
+    if (placeName != null) {
+        payload.placeName = placeName
+    }
+
+    return await axios.post(`http://127.0.0.1:8080/users/points`, payload).then(response => {
         return response.data
     }).catch(e => {
         return e
