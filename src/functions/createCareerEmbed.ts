@@ -77,7 +77,7 @@ function parseData(date: string): string {
     let month = Number.parseInt(date_split[1])
     let day = Number.parseInt(date_split[2])
 
-    let monthString = monthTable[month]
+    let monthString = monthTable[month - 1]
 
     return `${monthString} ${day}, ${year} @ ${split[1].substring(0, 5)}`
 }
