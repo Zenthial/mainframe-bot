@@ -1,4 +1,5 @@
 import { Client, Collection, Intents } from "discord.js"
+import { ActivityTypes } from "discord.js/typings/enums.js"
 import { createLbEmbed } from "./commands/lb.js"
 import { userInputModelFunction } from "./functions/modalFunctions.js"
 import { DISCORD_TOKEN } from "./secrets.js"
@@ -17,6 +18,7 @@ async function main() {
     const client = new Client({ intents: [Intents.FLAGS.GUILDS] })
 
     client.on("ready", () => {
+        // client.user?.setActivity("Circon deez nuts", { type: "CUSTOM" });
         console.log(`Client logged in`)
     })
 

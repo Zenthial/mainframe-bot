@@ -27,7 +27,7 @@ export class Command {
                     let member = interaction.member as GuildMember
 
                     try {
-                        await member.setNickname(`[${rankRole.name}] userInfo.name`);
+                        await member.setNickname(`[${rankRole.name}] ${userInfo.name}`);
                         return_str += `set nickname to ${userInfo.name}\n`
                     } catch (e) {
                         return_str += "failed to set nickname due to you having too high of a permission level\n"
